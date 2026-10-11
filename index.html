@@ -1,0 +1,527 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SryModz v3 | Self Menu</title>
+<style>
+:root {
+  --accent:#00ff9d;
+  --bg:#07090e;
+  --panel:#101722;
+  --text:#eaf7ff;
+  --muted:#8294a8;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse at 50% 0%,#153044 0,transparent 48%),
+    var(--bg);
+  color:var(--text);
+  font:14px/1.45 "Arial",sans-serif;
+}
+button,input,select { font:inherit; }
+button { cursor:pointer; }
+.shell {
+  max-width:1050px;
+  margin:20px auto;
+  padding:14px;
+}
+.frame {
+  border:1px solid var(--accent);
+  box-shadow:0 0 28px color-mix(in srgb,var(--accent) 18%,transparent);
+  background:#080d14ed;
+  overflow:hidden;
+}
+.top {
+  padding:20px;
+  border-bottom:1px solid #263546;
+  background:linear-gradient(110deg,#101e2d,#080b11);
+}
+.logo {
+  font-size:clamp(27px,6vw,48px);
+  font-weight:1000;
+  letter-spacing:3px;
+  animation:rainbow 5s linear infinite;
+}
+@keyframes rainbow {
+  0%{color:#ff3158}
+  20%{color:#ffb52e}
+  40%{color:#b5ff36}
+  60%{color:#21ffe0}
+  80%{color:#a76bff}
+  100%{color:#ff3158}
+}
+.sub {
+  color:var(--muted);
+  letter-spacing:3px;
+  font-size:11px;
+}
+.status {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:15px;
+  color:var(--accent);
+  font-size:11px;
+}
+.layout {
+  display:grid;
+  grid-template-columns:210px minmax(0,1fr);
+  min-height:540px;
+}
+.sidebar {
+  padding:12px;
+  background:#0b1018;
+  border-right:1px solid #253142;
+}
+.navtitle,.section-label {
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:2px;
+  margin:12px 8px;
+}
+.nav {
+  display:block;
+  width:100%;
+  padding:12px;
+  margin:4px 0;
+  text-align:left;
+  color:#b8c9d9;
+  background:transparent;
+  border:1px solid transparent;
+}
+.nav:hover,.nav.active {
+  color:var(--accent);
+  background:#14221f;
+  border-color:var(--accent);
+}
+.content { padding:20px; min-width:0; }
+.heading {
+  font-size:23px;
+  font-weight:900;
+  margin:0 0 4px;
+}
+.desc { color:var(--muted); margin-bottom:20px; }
+.grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+.card {
+  padding:14px;
+  background:linear-gradient(145deg,#121c29,#0c1119);
+  border:1px solid #293748;
+  min-width:0;
+}
+.card h3 { margin:0 0 5px; font-size:14px; }
+.card p { color:var(--muted); font-size:12px; margin:0 0 12px; }
+.action {
+  color:var(--accent);
+  border:1px solid var(--accent);
+  background:#0b1717;
+  padding:8px 11px;
+  width:100%;
+  text-align:center;
+}
+.action:hover { background:#18302a; }
+.row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:12px 0;
+  border-bottom:1px solid #202c3a;
+}
+.row:last-child { border-bottom:0; }
+.small { color:var(--muted); font-size:12px; }
+.pill {
+  border:1px solid #334253;
+  padding:4px 8px;
+  color:#a9bacb;
+  font-size:10px;
+}
+.toggle {
+  width:42px;
+  height:23px;
+  border:1px solid #425164;
+  background:#1b2430;
+  border-radius:20px;
+  position:relative;
+  flex-shrink:0;
+}
+.toggle:after {
+  content:"";
+  position:absolute;
+  width:15px;
+  height:15px;
+  top:3px;left:3px;
+  border-radius:50%;
+  background:#8b9aaa;
+  transition:.15s;
+}
+.toggle.on { background:#123d30; border-color:var(--accent); }
+.toggle.on:after { left:21px; background:var(--accent); }
+input[type=range] { width:100%; accent-color:var(--accent); }
+input[type=color] {
+  width:48px;height:32px;
+  border:1px solid #455569;
+  background:#101722;
+}
+input[type=number],select {
+  width:110px;
+  padding:8px;
+  color:var(--text);
+  background:#080d14;
+  border:1px solid #344354;
+}
+.back {
+  padding:8px 12px;
+  margin:0 0 16px;
+  color:var(--accent);
+  background:transparent;
+  border:1px solid #344354;
+}
+.notice {
+  padding:12px;
+  margin-top:15px;
+  border-left:3px solid var(--accent);
+  background:#111b22;
+  color:#b9cbd9;
+  font-size:12px;
+}
+.toast {
+  position:fixed;
+  bottom:22px;left:50%;
+  transform:translateX(-50%);
+  background:#10251f;
+  border:1px solid var(--accent);
+  color:var(--text);
+  padding:12px 18px;
+  z-index:10;
+  display:none;
+  box-shadow:0 0 20px #00ff9d22;
+}
+.footer {
+  border-top:1px solid #263546;
+  padding:12px 18px;
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  flex-wrap:wrap;
+  color:var(--muted);
+  font-size:10px;
+}
+@media(max-width:650px) {
+  .shell { margin:0; padding:5px; }
+  .layout { grid-template-columns:1fr; }
+  .sidebar {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    border-right:0;
+    border-bottom:1px solid #253142;
+  }
+  .navtitle { grid-column:1/-1; }
+  .nav { margin:2px 0; }
+  .content { padding:14px; }
+  .grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<div class="frame">
+  <header class="top">
+    <div class="logo">SryModz v3</div>
+    <div class="sub">SELF MENU // BLACK OPS II STYLE INTERFACE</div>
+    <div class="status">
+      <span>● INTERFACE ONLINE</span>
+      <span id="clock">SYSTEM READY</span>
+      <span id="activeCount">0 OPTIONS SELECTED</span>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="navtitle">MAIN NAVIGATION</div>
+      <button class="nav active" data-page="home">▣ &nbsp; Main Menu</button>
+      <button class="nav" data-page="self">◈ &nbsp; Self Menu</button>
+      <button class="nav" data-page="player">♙ &nbsp; Player Options</button>
+      <button class="nav" data-page="weapons">⚔ &nbsp; Weapon Menu</button>
+      <button class="nav" data-page="zombies">☣ &nbsp; Zombies Menu</button>
+      <button class="nav" data-page="multiplayer">◎ &nbsp; Multiplayer</button>
+      <button class="nav" data-page="stats">★ &nbsp; Prestige / Stats</button>
+      <button class="nav" data-page="visuals">◉ &nbsp; HUD & Colors</button>
+      <button class="nav" data-page="settings">⚙ &nbsp; Settings</button>
+    </aside>
+
+    <main class="content" id="content"></main>
+  </div>
+
+  <footer class="footer">
+    <span>SRYMODZ // CUSTOM INTERFACE</span>
+    <span>BUILD 03.00</span>
+    <span>LOCAL UI SESSION</span>
+  </footer>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const content = document.getElementById("content");
+const state = {
+  page:"home",
+  selected:new Set(),
+  accent:"#00ff9d",
+  bg:"#07090e",
+  panel:"#101722",
+  playerName:"Player",
+  level:55,
+  prestige:10,
+  fov:90
+};
+
+const pages = {
+home:{
+ title:"MAIN MENU",
+ desc:"Welcome back. Choose a section to customize your interface.",
+ html:()=>`
+ <div class="grid">
+  ${tile("SELF MENU","Personal options and character settings","self","OPEN MENU")}
+  ${tile("PLAYER OPTIONS","Movement, view and player profile","player","OPEN MENU")}
+  ${tile("WEAPON MENU","Weapon selector and loadout layout","weapons","OPEN MENU")}
+  ${tile("ZOMBIES MENU","Zombies-themed options panel","zombies","OPEN MENU")}
+  ${tile("MULTIPLAYER","Multiplayer-style submenu","multiplayer","OPEN MENU")}
+  ${tile("PRESTIGE / STATS","Editable profile values","stats","OPEN MENU")}
+ </div>
+ <div class="notice">Select any menu to open its submenu. Changes are kept in this page while it remains open.</div>`
+},
+self:{
+ title:"SELF MENU",
+ desc:"Personal profile and self-menu controls.",
+ html:()=>`
+ ${toggle("God Mode","Visual menu toggle only","god")}
+ ${toggle("Unlimited Ammo","Visual menu toggle only","ammo")}
+ ${toggle("No Recoil","Visual menu toggle only","recoil")}
+ ${toggle("Speed Boost","Visual menu toggle only","speed")}
+ ${toggle("Super Jump","Visual menu toggle only","jump")}
+ ${toggle("Invisible Player","Visual menu toggle only","invisible")}
+ ${toggle("Freeze Controls","Visual menu toggle only","freeze")}
+ ${toggle("Show Player Aura","Interface effect selector","aura")}
+ <div class="notice">These switches change their displayed state only; they do not modify BO2.</div>`
+},
+player:{
+ title:"PLAYER OPTIONS",
+ desc:"Personalize the player panel and view settings.",
+ html:()=>`
+ <div class="row"><div><b>Player Name</b><div class="small">Displayed profile name</div></div>
+ <input id="playerName" value="${esc(state.playerName)}" maxlength="18"></div>
+ <div class="row"><div><b>Field of View</b><div class="small">Interface setting: <span id="fovVal">${state.fov}</span></div></div>
+ <input id="fov" type="range" min="60" max="120" value="${state.fov}"></div>
+ ${toggle("Third Person","Visual option indicator","thirdperson")}
+ ${toggle("Player Coordinates","Show sample coordinates","coords")}
+ ${toggle("Show Nameplate","Profile display option","nameplate")}
+ <button class="action" id="savePlayer">SAVE PROFILE</button>`
+},
+weapons:{
+ title:"WEAPON MENU",
+ desc:"Choose a weapon card and customize your displayed loadout.",
+ html:()=>`
+ <div class="grid">
+ ${tile("ASSAULT RIFLE","Balanced primary weapon","weapon_ar","SELECT")}
+ ${tile("SNIPER RIFLE","Precision weapon","weapon_sniper","SELECT")}
+ ${tile("SUBMACHINE GUN","Compact close-range weapon","weapon_smg","SELECT")}
+ ${tile("LIGHT MACHINE GUN","Heavy weapon","weapon_lmg","SELECT")}
+ ${tile("SHOTGUN","Close-range loadout","weapon_shotgun","SELECT")}
+ ${tile("PISTOL","Secondary weapon","weapon_pistol","SELECT")}
+ </div>
+ <div class="row"><b>Displayed Loadout</b><span class="pill" id="loadout">NONE</span></div>`
+},
+zombies:{
+ title:"ZOMBIES MENU",
+ desc:"A Zombies-themed submenu with selectable interface options.",
+ html:()=>`
+ ${toggle("God Mode","Visual status switch","z_god")}
+ ${toggle("Infinite Ammo","Visual status switch","z_ammo")}
+ ${toggle("Max Points","Profile simulation switch","z_points")}
+ ${toggle("Fast Reload","Visual status switch","z_reload")}
+ ${toggle("Round Indicator","Show sample round status","z_round")}
+ <div class="row"><div><b>Displayed Round</b><div class="small">Local profile value</div></div>
+ <input type="number" min="1" max="999" id="round" value="20"></div>
+ <button class="action" id="saveRound">UPDATE DISPLAY</button>`
+},
+multiplayer:{
+ title:"MULTIPLAYER MENU",
+ desc:"Multiplayer-style options, shown as an interface preview.",
+ html:()=>`
+ ${toggle("Aimbot Status","Visual switch only; no targeting","mp_aim")}
+ ${toggle("ESP Status","Visual switch only; no game overlay","mp_esp")}
+ ${toggle("No Recoil Status","Visual switch only","mp_recoil")}
+ ${toggle("UAV Status","Interface status indicator","mp_uav")}
+ ${toggle("Show Match HUD","Preview match HUD card","mp_hud")}
+ <div class="card" style="margin-top:14px">
+ <h3>MATCH HUD PREVIEW</h3>
+ <p>Score: 1250 &nbsp; | &nbsp; K/D: 2.40 &nbsp; | &nbsp; Match: READY</p>
+ <span class="pill">LOCAL PREVIEW</span>
+ </div>`
+},
+stats:{
+ title:"PRESTIGE / STATS",
+ desc:"Edit the values shown in your local profile card.",
+ html:()=>`
+ <div class="row"><div><b>Displayed Level</b><div class="small">1–1000</div></div>
+ <input type="number" id="level" min="1" max="1000" value="${state.level}"></div>
+ <div class="row"><div><b>Displayed Prestige</b><div class="small">0–20</div></div>
+ <input type="number" id="prestige" min="0" max="20" value="${state.prestige}"></div>
+ <button class="action" id="saveStats">UPDATE PROFILE DISPLAY</button>
+ <div class="card" style="margin-top:15px">
+ <h3>PLAYER CARD</h3>
+ <p id="profileCard">${esc(state.playerName)} · Level ${state.level} · Prestige ${state.prestige}</p>
+ </div>
+ <div class="notice">The displayed values do not change your real game account or online statistics.</div>`
+},
+visuals:{
+ title:"HUD & COLOR STUDIO",
+ desc:"Choose your own colors for the interface.",
+ html:()=>`
+ ${colorRow("Accent / Neon Color","accent",state.accent)}
+ ${colorRow("Page Background","bg",state.bg)}
+ ${colorRow("Panel Background","panel",state.panel)}
+ <div class="row"><div><b>Rainbow Logo</b><div class="small">Animated title effect</div></div>
+ <button class="action" style="width:auto" id="rainbow">TOGGLE EFFECT</button></div>
+ ${toggle("Glow Effect","Accent glow around the frame","glow")}
+ <button class="action" id="resetColors">RESET COLORS</button>`
+},
+settings:{
+ title:"SETTINGS",
+ desc:"Configure your interface session.",
+ html:()=>`
+ ${toggle("Compact Layout","Toggle condensed card spacing","compact")}
+ ${toggle("Show Notifications","Display action feedback","notifications")}
+ <div class="row"><div><b>Menu Scale</b><div class="small">Browser zoom is controlled by your device</div></div><span class="pill">RESPONSIVE</span></div>
+ <button class="action" id="clearToggles">RESET ALL SWITCHES</button>
+ <div class="notice">This is a standalone HTML interface. It does not inject code into a running game.</div>`
+}
+};
+
+function esc(s){
+ return String(s).replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
+}
+function tile(title,desc,key,label){
+ return `<div class="card"><h3>${title}</h3><p>${desc}</p>
+ <button class="action" data-action="${key}">${label}</button></div>`;
+}
+function toggle(title,desc,key){
+ const on=state.selected.has(key);
+ return `<div class="row"><div><b>${title}</b><div class="small">${desc}</div></div>
+ <button class="toggle ${on?"on":""}" data-toggle="${key}" aria-label="${title}" aria-pressed="${on}"></button></div>`;
+}
+function colorRow(label,key,value){
+ return `<div class="row"><div><b>${label}</b></div>
+ <input type="color" data-color="${key}" value="${value}"></div>`;
+}
+function render(page=state.page){
+ state.page=page;
+ document.querySelectorAll(".nav").forEach(b=>
+  b.classList.toggle("active",b.dataset.page===page));
+ const p=pages[page]||pages.home;
+ content.innerHTML=`<h1 class="heading">${p.title}</h1>
+ <div class="desc">${p.desc}</div>${p.html()}`;
+ bind();
+ updateCount();
+}
+function notify(message){
+ if(state.selected.has("notifications")===false &&
+    state.page==="settings") return;
+ const t=document.getElementById("toast");
+ t.textContent=message;t.style.display="block";
+ clearTimeout(notify.timer);
+ notify.timer=setTimeout(()=>t.style.display="none",1800);
+}
+function updateCount(){
+ document.getElementById("activeCount").textContent=
+ state.selected.size+" OPTIONS SELECTED";
+}
+function applyColors(){
+ document.documentElement.style.setProperty("--accent",state.accent);
+ document.documentElement.style.setProperty("--bg",state.bg);
+ document.documentElement.style.setProperty("--panel",state.panel);
+}
+function bind(){
+ content.querySelectorAll("[data-action]").forEach(b=>{
+  b.onclick=()=>{
+   const key=b.dataset.action;
+   if(pages[key]) render(key);
+   else {
+    state.selected.add(key);
+    const loadout=document.getElementById("loadout");
+    if(loadout) loadout.textContent=key.replace("weapon_","").toUpperCase();
+    render(state.page);
+    notify("Auswahl aktualisiert: "+key);
+   }
+  };
+ });
+ content.querySelectorAll("[data-toggle]").forEach(b=>{
+  b.onclick=()=>{
+   const k=b.dataset.toggle;
+   state.selected.has(k)?state.selected.delete(k):state.selected.add(k);
+   render(state.page);
+   notify(k.toUpperCase()+": "+(state.selected.has(k)?"ON":"OFF"));
+  };
+ });
+ content.querySelectorAll("[data-color]").forEach(input=>{
+  input.oninput=()=>{
+   state[input.dataset.color]=input.value;
+   applyColors();
+  };
+ });
+ const name=document.getElementById("playerName");
+ const fov=document.getElementById("fov");
+ if(name) name.onchange=()=>{state.playerName=name.value||"Player";};
+ if(fov) fov.oninput=()=>{
+  state.fov=Number(fov.value);
+  document.getElementById("fovVal").textContent=state.fov;
+ };
+ const savePlayer=document.getElementById("savePlayer");
+ if(savePlayer) savePlayer.onclick=()=>{
+  state.playerName=name.value||"Player";render("player");notify("Profil aktualisiert");
+ };
+ const saveStats=document.getElementById("saveStats");
+ if(saveStats) saveStats.onclick=()=>{
+  state.level=Math.max(1,Math.min(1000,Number(document.getElementById("level").value)||1));
+  state.prestige=Math.max(0,Math.min(20,Number(document.getElementById("prestige").value)||0));
+  render("stats");notify("Profilanzeige aktualisiert");
+ };
+ const saveRound=document.getElementById("saveRound");
+ if(saveRound) saveRound.onclick=()=>notify("Rundenanzeige aktualisiert: "+document.getElementById("round").value);
+ const reset=document.getElementById("resetColors");
+ if(reset) reset.onclick=()=>{
+  state.accent="#00ff9d";state.bg="#07090e";state.panel="#101722";
+  applyColors();render("visuals");notify("Farben zurückgesetzt");
+ };
+ const clear=document.getElementById("clearToggles");
+ if(clear) clear.onclick=()=>{
+  state.selected.clear();render("settings");notify("Schalter zurückgesetzt");
+ };
+ const rainbow=document.getElementById("rainbow");
+ if(rainbow) rainbow.onclick=>
+  document.querySelector(".logo").classList.toggle("no-rainbow");
+}
+document.querySelectorAll(".nav").forEach(b=>b.onclick=()=>render(b.dataset.page));
+setInterval(()=>{
+ document.getElementById("clock").textContent=
+ new Date().toLocaleTimeString("de-DE");
+},1000);
+render("home");
+</script>
+<style>
+.logo.no-rainbow { animation:none;color:var(--accent); }
+</style>
+</body>
+</html>
